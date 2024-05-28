@@ -2,6 +2,7 @@
 
 import React from 'react'
 import '@/styles/globals.css'
+import Provider from '@/components/Provider'
 
 
 
@@ -9,9 +10,11 @@ const RootLayout = ( {children}) => {
   return (
     <html>
         <body>
-            <div>
-                {children}
-            </div>
+            <Provider>
+              <div>
+                  {children}
+              </div>
+            </Provider>
         </body>
     </html>
   )

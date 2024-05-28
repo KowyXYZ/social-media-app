@@ -28,7 +28,7 @@ const Home = () => {
             <div className='flex gap-12 flex-col'>
                 {placeholder.map((post, index) => {
                     return(
-                        <div className='border-2 w-[400px] p-5 rounded-2xl flex flex-col'>
+                        <div className='border-2 w-[350px] sm:w-[400px] p-5 rounded-2xl flex flex-col'>
                             <div className='flex justify-between items-start'>
                              <div className='flex justify-start items-center gap-2'>
 
