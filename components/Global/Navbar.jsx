@@ -1,4 +1,6 @@
 "use client"
+
+
 import { signIn, signOut, useSession, getProviders } from 'next-auth/react'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -44,15 +46,18 @@ const Navbar = () => {
                 <Link href='/' className='hover:border-b-[#fff] border-b-2 border-transparent transition-all ease-in-out delay-100'>Home</Link>
                 <Link href='/profile' className='hover:border-b-[#805f5f] border-b-2 border-transparent transition-all ease-in-out delay-100'>Profile</Link>
               
+              {session?.user ? <button>Sign Out</button> : <div>
                 {providers && 
-                  Object.values(providers).map((provider) => 
-                    (
-                      <button type="button" key={provider.name} onClick={() => signIn(provider.id)} >
-                        Sign In
-                      </button>
+                    Object.values(providers).map((provider) => 
+                      (
+                        <button type="button" key={provider.name} onClick={() => signIn(provider.id)} >
+                          Sign In
+                        </button>
+                      )
                     )
-                  )
-            }
+              }
+               </div> }
+               
             </div>
              
             <div className='relative sm:hidden flex'>
