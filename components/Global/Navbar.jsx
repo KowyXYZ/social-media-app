@@ -43,21 +43,41 @@ const Navbar = () => {
             </div>
 
             <div className='hidden sm:flex gap-12 justify-center items-center text-[18px] capitalize'>
-                <Link href='/' className='hover:border-b-[#fff] border-b-2 border-transparent transition-all ease-in-out delay-100'>Home</Link>
-                <Link href='/profile' className='hover:border-b-[#805f5f] border-b-2 border-transparent transition-all ease-in-out delay-100'>Profile</Link>
+                 
+              {session?.user ?
               
-              {session?.user ? <button>Sign Out</button> : <div>
+              <div className='flex justify-center items-center gap-12'>
+                 <Link href='/' className='hover:border-b-[#fff] border-b-2 border-transparent transition-all ease-in-out delay-100'>Home</Link>
+               
+              
+                {session?.user ? 
+                 <Link href='/profile' className='flex justify-center items-center gap-4 border-2 rounded-2xl p-2 py-1'>
+                  <p>Profile</p>
+                  <img className='rounded-full w-10' src={session?.user.image} alt="user image" /> 
+                  
+                 </Link>: <></>} 
+
+                 <button onClick={() => signOut()}>Sign Out</button>
+              </div> :
+               <div className='flex gap-12'>
+                <Link href='/' className='hover:border-b-[#fff] border-b-2 border-transparent transition-all ease-in-out delay-100'>Home</Link>
                 {providers && 
                     Object.values(providers).map((provider) => 
                       (
-                        <button type="button" key={provider.name} onClick={() => signIn(provider.id)} >
-                          Sign In
-                        </button>
+                        <div className='gap-12 flex '>
+                            
+                         <button onClick={() => signIn(provider.id)} className='hover:border-b-[#805f5f] border-b-2 border-transparent transition-all ease-in-out delay-100'>Profile</button>
+                       
+                         <button type="button" key={provider.name} onClick={() => signIn(provider.id)} >
+                             Sign In
+                          </button>
+                        </div>
                       )
                     )
               }
+                
                </div> }
-               
+            
             </div>
              
             <div className='relative sm:hidden flex'>

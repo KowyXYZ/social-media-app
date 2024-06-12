@@ -11,10 +11,9 @@ export const connectToDB = async() => {
     }
 
     try {
-        await mongoose.connect(process.env.MONGODB_URL, {
+        await mongoose.connect(process.env.MONGODB_URI, {
             dbName: 'social_media',
-            useNewUrlParser: true,
-            useUnifiedToplogy: true
+            useNewUrlParser: true
         })
 
         isConnected = true

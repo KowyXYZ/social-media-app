@@ -3,6 +3,8 @@
 import React from 'react'
 import '@/styles/globals.css'
 import Provider from '@/components/Provider'
+import Navbar from '@/components/Global/Navbar'
+import Footer from '@/components/Global/Footer'
 
 
 
@@ -12,7 +14,9 @@ const RootLayout = ( {children}) => {
         <body>
             <Provider>
               <div>
+                <Navbar/>
                   {children}
+                <Footer/>
               </div>
             </Provider>
         </body>

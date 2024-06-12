@@ -1,8 +1,14 @@
+"use client"
+
 import Footer from '@/components/Global/Footer'
 import Navbar from '@/components/Global/Navbar'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { signIn, signOut, useSession, getProviders } from 'next-auth/react'
 
 const Profile = () => {
+
+  const {data: session} = useSession()
+
 
   const postsPlaceholder = [
     {
@@ -24,24 +30,42 @@ const Profile = () => {
     }
 ]
 
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const currentUserID = session?.user.id; // Assuming you have the session object available
+        const response = await fetch(`/api/users/route?currentUserID=${currentUserID}`);
+        const data = await response.json();
+        setUserData(data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+
+  console.log(userData)
+
   return (
     <div>
-        <Navbar/>
+
         <div className=' flex justify-center items-center py-12 uppercase flex-col'>
             <div className='flex sm:justify-center flex-col sm:flex-row sm:gap-24 gap-4 items-center '>
               <div className='flex justify-center items-center gap-3'>
                   <div className='p-1 border-2 rounded-full'>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                    </svg>
+                   <img src={session?.user?.image} className='rounded-full' alt="userimg" />
                   </div>
                   <div>
-                    <p className='text-[24px]'>USER</p>
+                    <p className='text-[24px]'>{session?.user.name}</p>
                   </div>
               </div>
 
               <div className='flex gap-8 sm:text-[20px]'>
-                <p>Followers: 1</p>
+                <p>Followers: </p>
                 <p>Following: 0</p>
                 <p>Posts: 0</p>
               </div>
@@ -51,7 +75,7 @@ const Profile = () => {
             <div className='flex gap-12 flex-col mt-16'>
                 {postsPlaceholder.map((post, index) => {
                     return(
-                        <div className='border-2 w-[350px] sm:w-[400px] p-5 rounded-2xl flex flex-col'>
+                        <div key={index} className='border-2 w-[350px] sm:w-[400px] p-5 rounded-2xl flex flex-col'>
                             <div className='flex justify-between items-start'>
                              <div className='flex justify-start items-center gap-2'>
 
@@ -114,7 +138,7 @@ const Profile = () => {
             </div>
             </div>
         </div>
-        <Footer/>
+
     </div>
   )
 }
