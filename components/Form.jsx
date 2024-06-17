@@ -24,7 +24,7 @@ const Form = ({
 
             <div className="flex-end  gap-4">
                 <Link href='/' className="text-gray-500 text-sm">Cancel</Link>
-                <button disable={submiting} className="px-5 py-1.5 text-sm bg-primary-orange rounded-full text-white" type="submit">Post</button>
+                <button  className="px-5 py-1.5 text-sm bg-primary-orange rounded-full text-white" type="submit">Post</button>
             </div>
         </form>
     </div>

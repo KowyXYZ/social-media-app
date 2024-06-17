@@ -17,6 +17,7 @@ const page = () => {
       tag: '',
     })
 
+
     const createPost = async(e) => {
       e.preventDefault()
       setSubmiting(true)
@@ -25,9 +26,10 @@ const page = () => {
         const response = await fetch('/api/posts/new', {
           method: "POST",
           body: JSON.stringify({
-            creator: session?.user?.id,
+            creator: session?.user?.name,
             text: post.text,
-            tag: post.tag
+            tag: post.tag,
+            image: session?.user?.image
           })
         })
 

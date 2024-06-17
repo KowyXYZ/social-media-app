@@ -1,4 +1,5 @@
 import React from 'react'
+import Feed from './Feed'
 
 const Home = () => {
 
@@ -26,7 +27,7 @@ const Home = () => {
     <div className='py-12'>
         <div className='flex justify-center items-center '>
             <div className='flex gap-12 flex-col'>
-                {placeholder.map((post, index) => {
+                {/* {placeholder.map((post, index) => {
                     return(
                         <div className='border-2 w-[350px] sm:w-[400px] p-5 rounded-2xl flex flex-col'>
                             <div className='flex justify-between items-start'>
@@ -87,7 +88,9 @@ const Home = () => {
                             </div>
                         </div>
                     )
-                })}
+                })} */}
+
+                <Feed/>
             </div>
       </div>
     </div>

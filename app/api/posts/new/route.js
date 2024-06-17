@@ -1,20 +1,23 @@
 import { connectToDB } from "@/utils/database"
 import Post from "@/models/post"
 
-export const GET = async(req, res) => {
+export const POST = async(req, res) => {
 
-    const {creator, text, tag} = await req.json()
+    const {creator, text, tag, image} = await req.json()
 
     try {
-        await connectToDB()
+       
+           await connectToDB()
 
-        const newPost =  new Post({
-            creator: creator,
-            text: text,
-            tag: tag
-        })
-
-        await newPost.save()
+            await Post.create({
+                creator: creator,
+                text: text,
+                tag: tag,
+                image: image,
+                likes: [],
+                comments: [],
+                id: creator.slice(0, 10) + tag.slice(0, 5)
+            })
 
         return new Response(JSON.stringify(newPost), {status: 201})
     } catch (error) {

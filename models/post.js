@@ -13,6 +13,18 @@ const postSchema = new Schema({
     tag: {
         type: 'String',
         required: [true, 'Tag is required']
+    },
+    image: {
+        type: 'String'
+    },
+    likes: {
+        type: "Array"
+    },
+    comments: {
+        type: "Array"
+    },
+    id: {
+        type: 'String'
     }
 })
 
