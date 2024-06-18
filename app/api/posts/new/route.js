@@ -1,9 +1,10 @@
 import { connectToDB } from "@/utils/database"
 import Post from "@/models/post"
+import User from "@/models/user"
 
 export const POST = async(req, res) => {
 
-    const {creator, text, tag, image} = await req.json()
+    const {creator, text, tag, image, id} = await req.json()
 
     try {
        
@@ -16,8 +17,17 @@ export const POST = async(req, res) => {
                 image: image,
                 likes: [],
                 comments: [],
-                id: creator.slice(0, 10) + tag.slice(0, 5)
+                id: id
             })
+
+            const creatorUser = await User.findById(id)
+
+            if(creatorUser) {
+                creatorUser.posts.push(...posts, Post._id)
+                await creatorUser.save();
+            } else {
+                throw new Error('User not found')
+            }
 
         return new Response(JSON.stringify(newPost), {status: 201})
     } catch (error) {

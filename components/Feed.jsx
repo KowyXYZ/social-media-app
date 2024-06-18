@@ -1,4 +1,5 @@
 "use client"
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 const Feed = () => {
@@ -26,11 +27,11 @@ const Feed = () => {
   return (
     <div>
         <div className='gap-5 flex flex-col justify-center items-center'>
-            {feedData?.map((post, index) => {
+            {feedData.length > 0 ? feedData?.map((post, index) => {
                 return(
                     <div className='border-2 w-[350px] sm:w-[400px] p-5 rounded-2xl flex flex-col'>
                             <div className='flex justify-between items-start'>
-                             <div className='flex justify-start items-center gap-2'>
+                             <Link href={`/profile/${post.id}`} className='flex justify-start items-center gap-2'>
 
                                      <div className='p-1 border-2 rounded-full'>
                                         <img src={post.image} className='rounded-full w-12 h-12' alt="slika" />
@@ -39,7 +40,7 @@ const Feed = () => {
                                     <div>
                                         <p className='text-[20px] font-semibold'>{post.creator}</p>
                                     </div>
-                                </div>
+                                </Link>
 
                                 <div>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -80,7 +81,7 @@ const Feed = () => {
                             </div>
                         </div>
                 )
-            })}
+            }) : <div>No posts at the moment</div>}
         </div>
     </div>
   )

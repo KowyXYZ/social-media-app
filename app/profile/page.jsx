@@ -90,7 +90,7 @@ const Profile = () => {
                     {userData?.posts?.map((post, index) => {
                       return(
                           <div>
-                            <p>Hi</p>
+                            <p></p>
                           </div>
                       )
                   })}

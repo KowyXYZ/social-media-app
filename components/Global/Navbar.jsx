@@ -55,7 +55,7 @@ const Navbar = () => {
                 <div className='flex gap-4'>
                    <Link href='/profile' className='flex justify-center items-center gap-4 border-2 rounded-2xl p-2 py-1'>
                   <p>Profile</p>
-                  <img className='rounded-full w-10' src={session?.user.image} alt="user image" /> 
+                  <img className='rounded-full w-10 ' src={session?.user ? session?.user?.image : 'https://cdn.pixabay.com/photo/2013/07/13/10/44/man-157699_960_720.png'} alt={session?.user ? 'Img' : 'Img'} /> 
                  </Link>
                  
                  <Link href='/create-post' className='flex justify-center items-center gap-4 border-green-500 border-2 rounded-2xl p-2 py-1'>
@@ -100,10 +100,40 @@ const Navbar = () => {
               </svg>
               </div>}
 
-              {toggle ? <div className='absolute top-10 right-2 bg-[#121212] text-[#fff] border-2 border-[#fff] flex flex-col gap-4 p-5 rounded-2xl w-[150px]'>
+              {toggle ? 
+              <div className='absolute top-10 right-2 bg-[#121212] text-[#fff] border-2 border-[#fff] flex flex-col gap-4 p-5 rounded-2xl w-[150px]'>
                 <Link href='/' className='hover:border-b-[#fff] border-b-2 border-transparent transition-all ease-in-out delay-100'>Home</Link>
-                <Link href='/profile' className='hover:border-b-[#805f5f] border-b-2 border-transparent transition-all ease-in-out delay-100'>Profile</Link>
-                <Link href='/sign-in' className='hover:border-b-[#fff] border-b-2 border-transparent transition-all ease-in-out delay-100'>Sign In</Link>
+
+                {session?.user ? 
+                
+                <div className='flex flex-col gap-4 justify-center items-start'>
+                  <Link href='/profile' className=''>Profile</Link>
+                  <Link href='/create-post' className='rounded-2xl'>Create Post </Link>
+                  <button onClick={() => signOut()}>Sign Out</button>
+                </div>
+                
+                : 
+                
+                <div className='flex justify-center items-start flex-col'>
+                    {providers && 
+                      Object.values(providers).map((provider) => 
+                        (
+                          <div className='gap-4 flex flex-col'>
+                              
+                          <button onClick={() => signIn(provider.id)}>Profile</button>
+                        
+                          <button type="button" key={provider.name} onClick={() => signIn(provider.id)} >
+                              Sign In
+                            </button>
+                          </div>
+                        )
+                      )
+                } 
+                </div>}
+                
+
+
+                
               </div> : <></>}
             </div>
     </div>

@@ -29,7 +29,8 @@ const page = () => {
             creator: session?.user?.name,
             text: post.text,
             tag: post.tag,
-            image: session?.user?.image
+            image: session?.user?.image,
+            id: session?.user?.id
           })
         })
 
