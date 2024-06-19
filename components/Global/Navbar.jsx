@@ -47,28 +47,38 @@ const Navbar = () => {
               {session?.user ?
               
               <div className='flex justify-center items-center gap-12'>
-                 <Link href='/' className='hover:border-b-[#fff] border-b-2 border-transparent transition-all ease-in-out delay-100'>Home</Link>
+                 <Link href='/' className='hover:border-b-[#fff] border-b-2 border-transparent transition-all ease-in-out delay-100'>
+                    <button class="before:ease relative h-8 w-32 overflow-hidden border border-white shadow-lg before:absolute before:left-0 before:-ml-2 before:h-48 before:w-48 before:origin-top-right before:-translate-x-full before:translate-y-12 before:-rotate-90 before:bg-slate-200 before:transition-all before:duration-300 hover:text-[#000] hover:shadow-[#fff] hover:before:-rotate-180">
+                      <span class="relative z-10">Home</span>
+                    </button>
+                  </Link>
                
               
                 {session?.user ?
 
                 <div className='flex gap-4'>
-                   <Link href='/profile' className='flex justify-center items-center gap-4 border-2 rounded-2xl p-2 py-1'>
-                  <p>Profile</p>
-                  <img className='rounded-full w-10 ' src={session?.user ? session?.user?.image : 'https://cdn.pixabay.com/photo/2013/07/13/10/44/man-157699_960_720.png'} alt={session?.user ? 'Img' : 'Img'} /> 
+                   <Link href='/profile' className='flex justify-center items-center  '>
+                   <button class="relative h-8 w-32 overflow-hidden border border-indigo-600 text-indigo-600 shadow-2xl transition-all duration-200 before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:m-auto before:h-0 before:w-0 before:rounded-sm before:bg-indigo-600 before:duration-300 before:ease-out hover:text-white hover:shadow-indigo-600 hover:before:h-40 hover:before:w-40 hover:before:opacity-80">
+                      <span class="relative z-10">Profile</span>
+                  </button>
+                 
                  </Link>
                  
-                 <Link href='/create-post' className='flex justify-center items-center gap-4 border-green-500 border-2 rounded-2xl p-2 py-1'>
-                  Create Post 
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>
+                 <Link href='/create-post' className='flex justify-center items-center '>
+                    <button class="flex  justify-center items-center before:ease relative h-8 w-32 overflow-hidden border border-green-500 bg-green-500 text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-green-500 hover:before:-translate-x-40">
+                      <span relative="relative z-10">New Post</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                      </svg>
+                    </button>
                   </Link>
                 </div>
 
                  : <></>} 
 
-                 <button onClick={() => signOut()}>Sign Out</button>
+                 <button onClick={() => signOut()} class="relative h-8 w-32 overflow-hidden border border-red-500  bg-white text-red-500 shadow-2xl transition-all before:absolute before:left-0 before:right-0 before:top-0 before:h-0 before:w-full before:bg-red-500  before:duration-500 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0 after:w-full after:bg-red-500  after:duration-500 hover:text-white hover:shadow-red-500  hover:before:h-2/4 hover:after:h-2/4">
+                  <span class="relative z-10">Sign Out</span>
+                 </button>
               </div> :
                <div className='flex gap-12'>
                 <Link href='/' className='hover:border-b-[#fff] border-b-2 border-transparent transition-all ease-in-out delay-100'>Home</Link>

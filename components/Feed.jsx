@@ -1,4 +1,5 @@
 "use client"
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
@@ -6,6 +7,8 @@ const Feed = () => {
 
 
     const [feedData, setFeedData] = useState([])
+    const {data: session} = useSession()
+
 
     useEffect(() => {
       const fetchPosts = async() => {
@@ -13,7 +16,6 @@ const Feed = () => {
         try {
             const response = await fetch('/api/posts')
             const data = await response.json()
-            console.log(data)
             setFeedData(data)
         } catch (error) {
             console.error('Failed to fetch posts:', error)
@@ -22,11 +24,35 @@ const Feed = () => {
       fetchPosts()
    
     }, [])
+
+
+
+    const handleFollow = async(postid) => {
+        try {
+            const response = await fetch('/api/followers/new', {
+                method: 'POST',
+                body: JSON.stringify({
+                    postid: postid,
+                    id: session?.user?.id,
+                    image: session?.user?.image,
+                    username: session?.user?.name
+                })
+            })
+
+            if (response.ok) {
+                console.log('Successfully followed user');
+            } else {
+                console.error('Failed to follow user');
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     
 
   return (
     <div>
-        <div className='gap-5 flex flex-col justify-center items-center'>
+        <div className='gap-16 flex flex-col justify-center items-center'>
             {feedData.length > 0 ? feedData?.map((post, index) => {
                 return(
                     <div className='border-2 w-[350px] sm:w-[400px] p-5 rounded-2xl flex flex-col'>
@@ -42,12 +68,12 @@ const Feed = () => {
                                     </div>
                                 </Link>
 
-                                <div>
+                                <button onClick={() => handleFollow(post.id)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
                                     </svg>
 
-                                </div>
+                                </button>
                             </div>
                            
                    

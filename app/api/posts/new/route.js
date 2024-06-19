@@ -23,7 +23,16 @@ export const POST = async(req, res) => {
             const creatorUser = await User.findById(id)
 
             if(creatorUser) {
-                creatorUser.posts.push(...posts, Post._id)
+                creatorUser.posts.push({
+                    creator: creator,
+                    text: text,
+                    tag: tag,
+                    image: image,
+                    likes: [],
+                    comments: [],
+                    id: id
+                })
+              
                 await creatorUser.save();
             } else {
                 throw new Error('User not found')
