@@ -16,7 +16,8 @@ export const POST = async(req, res) => {
 
         // Check if userThatFollows is already following creatorUser
         const isAlreadyFollowing = creatorUser.followers.some(follower => follower.id === id);
-        if (!isAlreadyFollowing) {
+        const ifYourself = creatorUser === userThatFollows
+        if (!isAlreadyFollowing & ifYourself) {
             creatorUser.followers.push({
                 id: id,
                 image: image,
