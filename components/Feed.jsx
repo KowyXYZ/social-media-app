@@ -62,7 +62,8 @@ const Feed = () => {
                 console.log('Success')
                 fetchPosts()
             } else {
-                console.log('Failed Dog')
+                console.log(response.status + " " + response.statusText)
+                console.log('Failed')
             }
         } catch (error) {
             console.log(error)
@@ -74,7 +75,7 @@ const Feed = () => {
         <div className='gap-16 flex flex-col justify-center items-center'>
             {feedData.length > 0 ? feedData?.filter((item) => item.id !== session?.user?.id).map((post, index) => {
                 return(
-                    <div className='border-2 w-[350px] sm:w-[400px] p-5 rounded-2xl uppercase flex flex-col'>
+                    <div key={index} className='border-2 w-[350px] sm:w-[400px] p-5 rounded-2xl uppercase flex flex-col'>
                             <div className='flex justify-between items-start'>
                              <Link href={`/profile/${post.id}`} className='flex justify-start items-center gap-2'>
 

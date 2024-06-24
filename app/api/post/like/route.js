@@ -12,27 +12,31 @@ export const POST = async (req, res) => {
         const likingUser = await User.findById(user);
 
         if (!currPost) {
-            return res.status(404).json({ message: 'Post not found' });
+            return new Response('Failed!', { status: 404 });
         }
 
-        // Check if user already liked the post by both id and username
-        const userLikedIndex = currPost.likes.findIndex(like => like.id.toString() === likingUser._id.toString() && like.username === likingUser.username);
+        if (!likingUser) {
+            return new Response('Failed!', { status: 404 });
+        }
 
-        if (userLikedIndex === -1) {
-            // User hasn't liked the post, so add their like
-            currPost.likes.push({ id: likingUser._id, username: likingUser.username, image: likingUser.image });
-            console.log('User added to likes array');
-        } else {
-            // User already liked the post, so remove their like
+        // Check if the user has already liked the post
+        const userLikedIndex = currPost.likes.findIndex((item) => item.id === likingUser._id);
+
+        if (userLikedIndex !== -1) {
+            // If user already liked, remove from likes array
             currPost.likes.splice(userLikedIndex, 1);
             console.log('User removed from likes array');
+        } else {
+            // If user not liked, add user to likes array
+            currPost.likes.push({ id: likingUser._id, username: likingUser.username, image: likingUser.image });
+            console.log('User added to likes array');
         }
 
         await currPost.save();
 
-
-        return new Response('Success', {status: 201})
+        return new Response('Success', { status: 201 });
     } catch (error) {
-        return new Response('Failed!', {status: 500})
+        console.error(error);
+        return new Response('Failed!', { status: 500 });
     }
 };
