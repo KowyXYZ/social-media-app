@@ -1,81 +1,94 @@
 "use client"
-import { useSession } from 'next-auth/react'
-import Link from 'next/link'
+
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 
-const Feed = () => {
+const page = ({params}) => {
 
+  const [userData, setUserData] = useState([]);
 
-    const [feedData, setFeedData] = useState([])
-    const {data: session} = useSession()
+  const [comment, setComment] = useState('')
 
+  const {data: session} = useSession()
 
-    const fetchPosts = async () => {
-        try {
-            const response = await fetch('/api/posts');
-            const data = await response.json();
-            setFeedData(data);
-        } catch (error) {
-            console.error('Failed to fetch posts:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchPosts();
-    }, []); // Fetch posts initially when the component mounts
-
-
-
-    const handleFollow = async(postid) => {
-        try {
-            const response = await fetch('/api/followers/new', {
-                method: 'POST',
-                body: JSON.stringify({
-                    postid: postid,
-                    id: session?.user?.id,
-                    image: session?.user?.image,
-                    username: session?.user?.name
-                })
-            })
-
-            if (response.ok) {
-                console.log('Successfully followed user');
-            } else {
-                console.error('Failed to follow user');
-            }
-        } catch (error) {
-            console.log(error)
-        }
+  const fetchPost = async () => {
+    try {
+        const response = await fetch(`/api/posts/${params.postid}`);
+        const data = await response.json();
+        setUserData([data]);
+    } catch (error) {
+        console.error('Failed to fetch post:', error);
     }
+};
 
-    const handleLike = async(postid) => {
-        try {
-            const response = await fetch('/api/post/like', {
-                method: 'POST',
-                body: JSON.stringify({
-                    postid: postid,
-                    user: session?.user?.id
-                })
-            })
+  useEffect(() => {
+  
+    fetchPost();
+}, [params.postid]); // Add params.id to dependency array to fetch data when it changes
 
-            if(response.ok) {
-                console.log('Success')
-                fetchPosts()
-            } else {
-                console.log(response.status + " " + response.statusText)
-                console.log('Failed')
-            }
-        } catch (error) {
-            console.log(error)
-        }
+const handleLike = async(postid) => {
+  try {
+      const response = await fetch('/api/post/like', {
+          method: 'POST',
+          body: JSON.stringify({
+              postid: postid,
+              user: session?.user?.id
+          })
+      })
+
+      if(response.ok) {
+          console.log('Success')
+          fetchPost()
+      } else {
+          console.log(response.status + " " + response.statusText)
+          console.log('Failed')
+      }
+  } catch (error) {
+      console.log(error)
+  }
+}
+
+
+const handleComment = async(postid) => {
+
+  if(comment === '') return
+  if(comment === " ") return
+
+  try {
+    const response = await fetch('/api/post/comment', {
+      method: "POST",
+      body: JSON.stringify({
+        postid: postid,
+        user: session?.user?.id,
+        comment: comment
+      })
+    })
+
+    if(response.ok) {
+      console.log('Success')
+      setComment('')
+      fetchPost()
+    } else {
+        console.log(response.status + " " + response.statusText)
+        console.log('Failed')
     }
-    
+  } catch (error) {
+     console.log(error)
+  }
+}
+
+if (!userData) {
+  return <div>Loading...</div>; // Handle loading state while data is fetched
+}
+
   return (
-    <div>
-        <div className='gap-16 flex flex-col justify-center items-center'>
-            {feedData.length > 0 ? feedData?.filter((item) => item.id !== session?.user?.id).map((post, index) => {
-                return(
-                    <div key={index} className='border-2 w-[350px] sm:w-[400px] p-5 rounded-2xl uppercase flex flex-col'>
+    <div className='flex justify-center items-center gap-12 py-12 flex-col'>
+        <h1 className='text-[32px] font-black uppercase'>Post Comments</h1>
+        <div>
+        {userData.length >= 0 ? userData?.map((post, index) => {
+                    return(
+                    <div  key={index} className='border-2 w-[350px] sm:w-[400px] p-5 rounded-2xl uppercase flex flex-col'>
                             <div className='flex justify-between items-start'>
                              <Link href={`/profile/${post.id}`} className='flex justify-start items-center gap-2'>
 
@@ -88,12 +101,7 @@ const Feed = () => {
                                     </div>
                                 </Link>
 
-                                <button onClick={() => handleFollow(post.id)}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-                                    </svg>
-
-                                </button>
+                                
                             </div>
                            
                    
@@ -130,12 +138,26 @@ const Feed = () => {
 
 
                             </div>
+
+                            <div className='flex justify-center flex-col gap-3 items-center py-5'>
+                              <p className='text-[20px] font-black'>Post a comment</p>
+                              <input value={comment} onChange={(e) => setComment(e.target.value)} type="text" className='outline-none py-1 w-[350px] placeholder-[#fff] h-[50px] px-2 rounded-xl' placeholder='Comment'/>
+                              <button onClick={() => handleComment(post._id)} class="relative flex h-[40px] w-32 items-center justify-center overflow-hidden bg-gray-800 text-white shadow-2xl transition-all before:absolute before:h-0 before:w-0 before:rounded-full before:bg-indigo-600 before:duration-500 before:ease-out hover:shadow-indigo-600 hover:before:h-56 hover:before:w-56">
+                                <span class="relative z-10">Post</span>
+                              </button>
+                            </div>
+
+                 
+
+
+                            
                         </div>
                 )
-            }) : <div>No posts at the moment</div>}
+            }) : <div></div>}
+
         </div>
     </div>
   )
 }
 
-export default Feed
+export default page

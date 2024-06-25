@@ -19,13 +19,12 @@ export const POST = async (req, res) => {
             return new Response('Failed!', { status: 404 });
         }
 
-        // Check if the user has already liked the post
-        const userLikedIndex = currPost.likes.findIndex((item) => item.id === likingUser._id);
+      
+        const userAlreadyLiked = currPost.likes.some(like => like.id.equals(likingUser._id));
 
-        if (userLikedIndex !== -1) {
+        if (userAlreadyLiked) {
             // If user already liked, remove from likes array
-            currPost.likes.splice(userLikedIndex, 1);
-            console.log('User removed from likes array');
+            currPost.likes = currPost.likes.filter(like => !like.id.equals(likingUser._id));
         } else {
             // If user not liked, add user to likes array
             currPost.likes.push({ id: likingUser._id, username: likingUser.username, image: likingUser.image });

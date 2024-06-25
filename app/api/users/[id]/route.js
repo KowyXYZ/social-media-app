@@ -8,8 +8,6 @@ export const GET = async(req, {params}) => {
 
         const userId = params.id; // Assuming id is passed correctly in the params
         const singleUser = await User.findById(userId)
-        console.log(userId)
-        console.log(singleUser.email)
 
         if (!singleUser) {
             return new Response('User not found', {status: 404});

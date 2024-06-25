@@ -65,7 +65,7 @@ const Navbar = () => {
                  </Link>
                  
                  <Link href='/create-post' className='flex justify-center items-center '>
-                    <button class="flex  justify-center items-center before:ease relative h-8 w-32 overflow-hidden border border-green-500 bg-green-500 text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-green-500 hover:before:-translate-x-40">
+                    <button class="flex  justify-center items-center before:ease relative h-8 w-32 overflow-hidden border border-indigo-600 bg-indigo-600 text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-indigo-600 hover:before:-translate-x-40">
                       <span relative="relative z-10">New Post</span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -76,7 +76,7 @@ const Navbar = () => {
 
                  : <></>} 
 
-                 <button onClick={() => signOut()} class="relative h-8 w-32 overflow-hidden border border-red-500  bg-white text-red-500 shadow-2xl transition-all before:absolute before:left-0 before:right-0 before:top-0 before:h-0 before:w-full before:bg-red-500  before:duration-500 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0 after:w-full after:bg-red-500  after:duration-500 hover:text-white hover:shadow-red-500  hover:before:h-2/4 hover:after:h-2/4">
+                 <button onClick={() => signOut()} class="relative h-8 w-32 overflow-hidden border border-indigo-600  bg-white text-indigo-600 shadow-2xl transition-all before:absolute before:left-0 before:right-0 before:top-0 before:h-0 before:w-full before:bg-indigo-600  before:duration-500 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0 after:w-full after:bg-indigo-600  after:duration-500 hover:text-white hover:shadow-indigo-600  hover:before:h-2/4 hover:after:h-2/4">
                   <span class="relative z-10">Sign Out</span>
                  </button>
               </div> :
