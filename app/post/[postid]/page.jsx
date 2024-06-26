@@ -78,6 +78,9 @@ const handleComment = async(postid) => {
   }
 }
 
+console.log(userData)
+
+
 if (!userData) {
   return <div>Loading...</div>; // Handle loading state while data is fetched
 }
@@ -145,12 +148,29 @@ if (!userData) {
                               <button onClick={() => handleComment(post._id)} class="relative flex h-[40px] w-32 items-center justify-center overflow-hidden bg-gray-800 text-white shadow-2xl transition-all before:absolute before:h-0 before:w-0 before:rounded-full before:bg-indigo-600 before:duration-500 before:ease-out hover:shadow-indigo-600 hover:before:h-56 hover:before:w-56">
                                 <span class="relative z-10">Post</span>
                               </button>
+                            </div>    
+
+
+                            <div className='gap-8 flex justify-center itmce flex-col'>
+                             {post.comments.map((item, index) => {
+                              return(
+                                <div className='border-[1px] p-5 rounded-xl '>
+                                  {item.map((el, i) => {
+                                    return(
+                                      
+                                      <div className='flex flex-col gap-2 justify-center items-center'>
+                                        <Link href={`/profile/${el.id}`} className='flex justify-center items-center gap-2'>
+                                          <img className='rounded-full w-10' src={el.image} alt={el.username} />
+                                          <p>{el.username}</p>
+                                        </Link>
+                                        <p>- {el.comment}</p>
+                                      </div>
+                                    )
+                                  })}
+                                </div>
+                              )
+                             })}
                             </div>
-
-                 
-
-
-                            
                         </div>
                 )
             }) : <div></div>}

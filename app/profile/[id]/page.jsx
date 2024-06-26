@@ -1,5 +1,6 @@
 "use client"
 
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
@@ -7,6 +8,8 @@ const Page = ({ params }) => {
     const [userData, setUserData] = useState([]);
 
     const [feedData, setFeedData] = useState([])
+
+    const {data: session} = useSession()
 
     const fetchPosts = async () => {
         try {
