@@ -10,20 +10,22 @@ const page = ({params}) => {
     const {data: session} = useSession()
 
     const [userData, setUserData] = useState([]);
+
+    const fetchUserData = async () => {
+      try {
+        const userId = session?.user?.id;
+        const response = await fetch(`/api/users/${params.id}`);
+        const data = await response.json();
+        setUserData(data);
+        console.log(setUserData); // Log the fetched data, not userData
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+  
   
     useEffect(() => {
-      const fetchUserData = async () => {
-        try {
-          const userId = session?.user?.id;
-          const response = await fetch(`/api/users/${params.id}`);
-          const data = await response.json();
-          setUserData(data);
-          console.log(setUserData); // Log the fetched data, not userData
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      };
-    
+      
       if (session?.user?.id) {
         fetchUserData();
       }
@@ -41,6 +43,27 @@ const page = ({params}) => {
     
     console.log(userData)
 
+    const handleUnfollow = async(postid) => {
+      try {
+          const response = await fetch('/api/followers/remove', {
+              method: "PATCH",
+              body: JSON.stringify({
+                  postid: postid,
+                  id: session?.user?.id,
+              })
+          })
+          if (response.ok) {
+              console.log('Successfully unfollowed user');
+              fetchUserData()
+          } else {
+              console.error('Failed to unfollow user');
+          }
+      } catch (error) {
+          console.log(error)
+      }
+
+  }
+
   return (
     <div className='w-full py-24'>
         <h1 className='uppercase text-[22px] font-black text-center'>{userData?.username} Followers</h1>
@@ -53,11 +76,13 @@ const page = ({params}) => {
                             <p className='text-[18px]'>{follower?.username}</p>
                         </Link>
                       
-                        <button>
+                        <div>
+                          {params.id === session?.user?.id ? <button onClick={() => handleUnfollow(follower?.id)}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                             </svg>
-                        </button>
+                        </button> : <></>}
+                        </div>
                     </div>
                 )
             }) : <div className='flex justify-center items-center text-[24px]'>Nobody follows this loser i mean user.</div>}

@@ -1,8 +1,12 @@
 import { connectToDB } from "@/utils/database";
 import User from "@/models/user";
 
-export const POST = async(req, res) => {
-    const { postid, id, image, username } = await req.json();
+export const PATCH = async(req, res) => {
+    if (req.method !== 'PATCH') {
+        return new Response('METHOD NOT ALLOWED!', {status: 405})
+    }
+
+    const { postid, id} = await req.json();
 
     try {
         await connectToDB();
@@ -17,24 +21,16 @@ export const POST = async(req, res) => {
         // Check if userThatFollows is already following creatorUser
         const isAlreadyFollowing = creatorUser.followers.some(follower => follower.id === id);
         const ifYourself = creatorUser === userThatFollows
-        if (!isAlreadyFollowing && !ifYourself) {
-            creatorUser.followers.push({
-                id: id,
-                image: image,
-                username: username,
-            });
+        if (isAlreadyFollowing && !ifYourself) {
+            creatorUser.followers = creatorUser.followers.filter(follower => follower.id !== id);
 
-            userThatFollows.following.push({
-                id: postid,
-                image: creatorUser.image,
-                username: creatorUser.username,
-            });
+            userThatFollows.following = userThatFollows.following.filter(following => following.id !== postid);
 
-            console.log('followed')
+            console.log('unfollowed')
             await userThatFollows.save();
             await creatorUser.save();
         } else {
-            throw new Error('Already following');
+            throw new Error('error');
         }
 
         return new Response('Success', {status: 201})

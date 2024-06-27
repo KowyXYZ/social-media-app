@@ -25,18 +25,18 @@ const Page = ({ params }) => {
         fetchPosts();
     }, []); // Fetch posts initially when the component mounts
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await fetch(`/api/users/${params.id}`);
-                const data = await response.json();
-                console.log(data);
-                setUserData(data); // Wrap data in an array to ensure userData remains an array
-            } catch (error) {
-                console.error('Failed to fetch user:', error);
-            }
-        };
+    const fetchUser = async () => {
+        try {
+            const response = await fetch(`/api/users/${params.id}`);
+            const data = await response.json();
+            console.log(data);
+            setUserData(data); // Wrap data in an array to ensure userData remains an array
+        } catch (error) {
+            console.error('Failed to fetch user:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchUser();
     }, [params.id]); // Add params.id to dependency array to fetch data when it changes
 
@@ -62,16 +62,66 @@ const Page = ({ params }) => {
         }
     }
 
+
+    const handleFollow = async(postid) => {
+        try {
+            const response = await fetch('/api/followers/new', {
+                method: 'POST',
+                body: JSON.stringify({
+                    postid: postid,
+                    id: session?.user?.id,
+                    image: session?.user?.image,
+                    username: session?.user?.name
+                })
+            })
+
+            if (response.ok) {
+                console.log('Successfully followed user');
+                fetchUser()
+            } else {
+                console.error('Failed to follow user');
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleUnfollow = async(postid) => {
+        try {
+            const response = await fetch('/api/followers/remove', {
+                method: "PATCH",
+                body: JSON.stringify({
+                    postid: postid,
+                    id: session?.user?.id,
+                })
+            })
+            if (response.ok) {
+                console.log('Successfully unfollowed user');
+                fetchUser()
+            } else {
+                console.error('Failed to unfollow user');
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+
     return (
         <div>
              <div className=' flex justify-center items-center py-12 uppercase flex-col'>
-                    <div className='flex sm:justify-center flex-col sm:flex-row sm:gap-24 gap-4 items-center '>
+                    <div className='bg-[#131313] rounded-xl p-8 flex sm:justify-center flex-col sm:flex-row sm:gap-24 gap-4 items-center '>
                         <div className='flex justify-center items-center gap-3'>
                             <div className='p-1 w-[100px] h-[100px] border-2 rounded-full'>
                                 <img src={userData?.image} className='rounded-full' alt="userimg" />
                             </div>
-                            <div>
+                            <div className='flex gap-3 justify-center items-center flex-col'>
                                 <p className='text-[24px]  uppercase font-black'>{userData?.username}</p>
+                                {params.id === session?.user?.id ? <></> : <div class="relative flex h-[35px] w-32 items-center justify-center overflow-hidden bg-indigo-600 font-medium text-white shadow-2xl transition-all duration-300 before:absolute before:inset-0 before:border-0 before:border-white before:duration-100 before:ease-linear hover:bg-white hover:text-indigo-600 hover:shadow-indigo-600 hover:before:border-[25px]">
+                                  <div class="relative z-10">{userData?.followers?.some(follower => follower.id === session?.user?.id) ? <button onClick={() => handleUnfollow(userData?._id)}>UNFOLLOW</button> : <button onClick={() => handleFollow(userData?._id)} >FOLLOW</button>}</div>
+                                </div>}
+                                
                             </div>
                         </div>
 
@@ -83,7 +133,7 @@ const Page = ({ params }) => {
                     </div>
 
                     <div>
-                    <div className='flex gap-12 flex-col mt-16 '>
+                    <div className='flex gap-12 flex-col-reverse mt-16 '>
 
                     {feedData.length > 0 ? feedData?.filter((item) => item.id === params.id).map((post, index) => {
                     return(
@@ -100,12 +150,7 @@ const Page = ({ params }) => {
                                     </div>
                                 </Link>
 
-                                <button onClick={() => handleFollow(post.id)}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-                                    </svg>
-
-                                </button>
+                                
                             </div>
                            
                    

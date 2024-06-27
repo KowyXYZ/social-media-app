@@ -88,7 +88,7 @@ const Profile = () => {
     <div>
 
         <div className=' flex justify-center items-center py-12 uppercase flex-col'>
-            <div className='flex sm:justify-center flex-col sm:flex-row sm:gap-24 gap-4 items-center '>
+            <div className='bg-[#131313] rounded-xl p-8 flex sm:justify-center flex-col sm:flex-row sm:gap-24 gap-4 items-center '>
               <div className='flex justify-center items-center gap-3'>
                   <div className='p-1 w-[100px] h-[100px] border-2 rounded-full'>
                    <img src={session?.user?.image} className='rounded-full' alt="userimg" />
@@ -106,7 +106,7 @@ const Profile = () => {
             </div>
 
             <div>
-            <div className='flex gap-12 flex-col mt-16'>
+            <div className='flex gap-12 flex-col-reverse mt-16'>
             {feedData.length > 0 ? feedData?.filter((item) => item.id === session?.user?.id).map((post, index) => {
                 return(
                     <div  key={index} className='border-2 w-[350px] sm:w-[400px] p-5 rounded-2xl uppercase flex flex-col'>
