@@ -41,14 +41,14 @@ const page = ({params}) => {
         );
     }
     
-    console.log(userData)
+    console.log(userData + 'profile/id/folowing')
 
-    const handleUnfollow = async(postid) => {
+    const handleUnfollow = async(followingUser) => {
       try {
-          const response = await fetch('/api/followers/remove', {
+          const response = await fetch('/api/followers/remove/following', {
               method: "PATCH",
               body: JSON.stringify({
-                  postid: postid,
+                  followingUser: followingUser,
                   id: session?.user?.id,
               })
           })
@@ -77,7 +77,7 @@ const page = ({params}) => {
                         </Link>
                       
                         <div>
-                          {params.id === session?.user?.id ? <button onClick={() => handleUnfollow(follower?.id)}>
+                          {params.id === session?.user?.id ? <button onClick={() => handleUnfollow(followingUser?.id)}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                             </svg>

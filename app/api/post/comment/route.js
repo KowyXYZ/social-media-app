@@ -1,9 +1,13 @@
 import { connectToDB } from "@/utils/database";
 import User from "@/models/user";
 import Post from "@/models/post";
+import { v4 as uuid } from "uuid";
 
 export const POST = async (req, res) => {
     const { postid, user, comment } = await req.json();
+
+    const unique_id = uuid();
+    const small_id = unique_id.slice(0, 8);
 
     try {
         await connectToDB();
@@ -15,7 +19,7 @@ export const POST = async (req, res) => {
             return new Response('Failed!', { status: 404 });
         }
 
-        currPost.comments.push({ id: likingUser._id, username: likingUser.username, image: likingUser.image, comment: comment })
+        currPost.comments.push({ id: small_id, creator: likingUser._id, username: likingUser.username, image: likingUser.image, comment: comment })
         
         
 

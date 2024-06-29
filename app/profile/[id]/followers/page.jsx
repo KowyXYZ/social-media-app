@@ -43,12 +43,12 @@ const page = ({params}) => {
     
     console.log(userData)
 
-    const handleUnfollow = async(postid) => {
+    const handleUnfollow = async(follower) => {
       try {
-          const response = await fetch('/api/followers/remove', {
+          const response = await fetch('/api/followers/remove/followers', {
               method: "PATCH",
               body: JSON.stringify({
-                  postid: postid,
+                  follower: follower,
                   id: session?.user?.id,
               })
           })

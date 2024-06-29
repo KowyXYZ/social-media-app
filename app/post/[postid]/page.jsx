@@ -78,8 +78,27 @@ const handleComment = async(postid) => {
   }
 }
 
-console.log(userData)
-
+  const removeComment = async(commentId, commentCreator) => {
+    try {
+      const response = await fetch('/api/post/comment/remove', {
+        method: 'PATCH',
+        body: JSON.stringify({
+            commentId: commentId,
+            commentCreator: commentCreator,
+            postCreator: userData?.id
+        })
+      })
+      if(response.ok) {
+        console.log('Success')
+        fetchPost()
+      } else {
+          console.log(response.status + " " + response.statusText)
+          console.log('Failed')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
 if (!userData) {
   return <div>Loading...</div>; // Handle loading state while data is fetched
@@ -151,19 +170,29 @@ if (!userData) {
                             </div>    
 
 
-                            <div className='gap-8 flex justify-center itmce flex-col'>
+                            <div className='gap-8 flex justify-center items-center flex-col'>
                              {post.comments.map((item, index) => {
                               return(
-                                <div className='border-[1px] p-5 rounded-xl '>
+                                <div key={index} className='w-full border-[1px] p-5 rounded-xl '>
                                   {item.map((el, i) => {
                                     return(
                                       
-                                      <div className='flex flex-col gap-2 justify-center items-center'>
-                                        <Link href={`/profile/${el.id}`} className='flex justify-center items-center gap-2'>
-                                          <img className='rounded-full w-10' src={el.image} alt={el.username} />
-                                          <p>{el.username}</p>
-                                        </Link>
+                                      <div className='flex flex-col gap-2 items-center'>
+                                        <div  className='flex justify-between items-center gap-24'>
+                                          <Link href={`/profile/${el.creator}`} className='flex justify-center gap-2 items-center'>
+                                            <img className='rounded-full w-10' src={el.image} alt={el.username} />
+                                            <p>{el.username}</p>
+                                          </Link>
+
+                                          <button onClick={() => removeComment(el.id, el.creator)} className={`flex justify-center items-center ${el.creator === session?.user?.id || session?.user.id === userData.id ? `flex` : "hidden"}`}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                            </svg>
+                                          </button>
+
+                                        </div>
                                         <p>- {el.comment}</p>
+                                        
                                       </div>
                                     )
                                   })}
