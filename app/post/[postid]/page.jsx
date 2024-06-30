@@ -78,14 +78,13 @@ const handleComment = async(postid) => {
   }
 }
 
-  const removeComment = async(commentId, commentCreator) => {
+  const removeComment = async(commentId, postId) => {
     try {
       const response = await fetch('/api/post/comment/remove', {
         method: 'PATCH',
         body: JSON.stringify({
             commentId: commentId,
-            commentCreator: commentCreator,
-            postCreator: userData?.id
+            postId: postId
         })
       })
       if(response.ok) {
@@ -184,7 +183,7 @@ if (!userData) {
                                             <p>{el.username}</p>
                                           </Link>
 
-                                          <button onClick={() => removeComment(el.id, el.creator)} className={`flex justify-center items-center ${el.creator === session?.user?.id || session?.user.id === userData.id ? `flex` : "hidden"}`}>
+                                          <button onClick={() => removeComment(el.id, post._id)} className={`flex justify-center items-center ${el.creator === session?.user?.id || session?.user.id === userData.id ? `flex` : "hidden"}`}>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                               <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                             </svg>
