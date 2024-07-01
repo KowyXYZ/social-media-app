@@ -26,22 +26,22 @@ const Feed = () => {
 
 
 
-    const handleFollow = async(postid) => {
+    const handleLike = async(postid) => {
         try {
-            const response = await fetch('/api/followers/new', {
+            const response = await fetch('/api/post/like', {
                 method: 'POST',
                 body: JSON.stringify({
                     postid: postid,
-                    id: session?.user?.id,
-                    image: session?.user?.image,
-                    username: session?.user?.name
+                    user: session?.user?.id
                 })
             })
 
-            if (response.ok) {
-                console.log('Successfully followed user');
+            if(response.ok) {
+                console.log('Success')
+                fetchPosts()
             } else {
-                console.error('Failed to follow user');
+                console.log(response.status + " " + response.statusText)
+                console.log('Failed')
             }
         } catch (error) {
             console.log(error)

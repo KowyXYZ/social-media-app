@@ -14,7 +14,6 @@ const Navbar = () => {
    const [providers, setProviders] = useState(null)
 
    const [searchText, setSearchText] = useState('')
-   console.log(searchText)
 
 
    useEffect(() => {
@@ -26,6 +25,8 @@ const Navbar = () => {
 
     setUpProviders();
   }, [])
+
+
    
 
   return (
@@ -38,15 +39,15 @@ const Navbar = () => {
 
             <div className='sm:flex relative hidden justify-center items-center gap-2  rounded-2xl'>
                
-                <input onChange={(e) => setSearchText(e.target.value)} type="text" placeholder='Search . . .' className='p-2 rounded-2xl w-[300px] outline-none' />
+                <input maxlength="16" onChange={(e) => setSearchText(e.target.value)} type="text" placeholder='Search . . .' className='p-2 rounded-2xl w-[300px] outline-none' />
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                   <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
 
-                <div className={`absolute left-0 -bottom-40 gap-6 bg-[#e3e3e3] flex-col justify-center p-4 items-start rounded-2xl text-[#212121] w-[300px] ${searchText.length > 0 ? 'flex' : 'hidden'}`}>
-                    <p>{searchText}: in #</p>
-                    <p>{searchText}: in Users</p>
-                    <p>{searchText}: in Post Text</p>
+                <div className={`absolute left-0 -bottom-40 gap-6 bg-[#e3e3e3] flex-col justify-center p-4 items-start rounded-2xl text-[#212121] w-[300px] ${searchText.length > 0  ? 'flex' : 'hidden'}`}>
+                    <Link onClick={() => setSearchText('')} href={`/search/hashtag/${searchText}`}>{searchText}: in #</Link>
+                    <Link onClick={() => setSearchText('')} href={`/search/users/${searchText}`}>{searchText}: in Users</Link>
+                    <Link onClick={() => setSearchText('')} href={`/search/text/${searchText}`}>{searchText}: in Post Text</Link>
                 </div>
 
             </div>
