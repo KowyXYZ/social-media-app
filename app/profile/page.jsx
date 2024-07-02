@@ -81,7 +81,33 @@ const Profile = () => {
 }
 
 
+const removePost = async(postid) => {
 
+    const hasConfirmed = confirm(
+        "Are you sure you want to delete this post?"
+      );
+
+      if(hasConfirmed) {
+        try {
+            const response = await fetch('/api/posts/remove',{
+                method: 'DELETE',
+                body: JSON.stringify({
+                    postid: postid
+                })
+            })
+            if (response.ok) {
+                console.log('Successfully removed post');
+                fetchPosts()
+            } else {
+                console.error('Failed to removed post');
+            }
+        } catch (error) {
+            console.log(error)
+        }
+      }
+
+    
+}
   
 
   return (
@@ -110,8 +136,8 @@ const Profile = () => {
             {feedData.length > 0 ? feedData?.filter((item) => item.id === session?.user?.id).map((post, index) => {
                 return(
                     <div  key={index} className='border-2 w-[350px] sm:w-[400px] p-5 rounded-2xl uppercase flex flex-col'>
-                            <div className='flex justify-between items-start'>
-                             <div  className='flex justify-start items-center gap-2'>
+                            <div className='flex justify-between items-center'>
+                             <div  className='flex justify-center items-center gap-2'>
 
                                      <div className='p-1 border-2 rounded-full'>
                                         <img src={post.image} className='rounded-full w-12 h-12' alt="slika" />
@@ -120,7 +146,15 @@ const Profile = () => {
                                     <div>
                                         <p className='uppercase text-[20px] font-semibold'>{post.creator}</p>
                                     </div>
+
+                                    
                                 </div>
+
+                                <button onClick={() => removePost(post._id)} className='flex justify-center items-center'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                        <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                                        </svg>
+                                </button>
            
                             </div>
                            
